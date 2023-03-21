@@ -39,12 +39,12 @@ const KanbanBoard = () => {
     };
 
     return (
-        <div className="kanban-board">
-            <div className="kanban-board-column">
+        <div className="board">
+            <div className="column">
                 <h2>To Do</h2>
                 {renderTaskCards('To Do')}
             </div>
-            <div className="kanban-board-column">
+            <div className="column">
                 <h2>In Progress</h2>
                 {renderTaskCards('In Progress')}
             </div>

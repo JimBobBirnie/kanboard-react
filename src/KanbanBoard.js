@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TaskCard from './TaskCard';
 
 const KanbanBoard = () => {
   const [tasks, setTasks] = useState([
@@ -23,21 +24,23 @@ const KanbanBoard = () => {
       .filter(task => task.status === status)
       .map(task => (
         <div key={task.id} className="task-card">
-          <h3>{task.title}</h3>
+          {/* <h3>{task.title}</h3>
           <button onClick={() => handleTaskMove(task.id, 'To Do')}>Move to To Do</button>
           <button onClick={() => handleTaskMove(task.id, 'In Progress')}>Move to In Progress</button>
-          <button onClick={() => handleTaskMove(task.id, 'Done')}>Move to Done</button>
+          <button onClick={() => handleTaskMove(task.id, 'Done')}>Move to Done</button> */}
+        
+        <TaskCard task={task}/>
         </div>
       ));
   };
 
   return (
     <div className="kanban-board">
-      <div className="column">
+      <div className="kanban-board-column">
         <h2>To Do</h2>
         {renderTaskCards('To Do')}
       </div>
-      <div className="column">
+      <div className="kanban-board-column">
         <h2>In Progress</h2>
         {renderTaskCards('In Progress')}
       </div>

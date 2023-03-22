@@ -22,9 +22,9 @@ const KanbanBoard = () => {
         // add more tasks as needed
     ]);
 
-    const handleTaskMove = (id, newStatus) => {
+    const handleTaskMove = (movingTask, newStatus) => {
         const updatedTasks = tasks.map(task => {
-            if (task.id === id) {
+            if (task === movingTask) {
                 return { ...task, status: newStatus };
             }
             return task;
@@ -58,7 +58,7 @@ const KanbanBoard = () => {
         
         <div className="board">
             {columnDivs}
-            <button onClick={() => handleTaskMove(1, 2)}>Move to Done</button>
+            <button onClick={() => handleTaskMove(tasks[0], 2)}>Move to Done</button>
         </div>
     );
 };

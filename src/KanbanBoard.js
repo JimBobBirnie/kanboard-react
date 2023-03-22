@@ -6,7 +6,9 @@ const KanbanBoard = () => {
 
     const [columns, setColumns] = useState([
         { id: 0, title: 'To Do' },
+        {id: 4, title:'In Analysis'},
         { id: 1, title: 'In Progress' },
+        { id: 5, title: 'In QA' },
         { id: 2, title: 'Done' },
         { id: 3, title: 'Complete' }
     ])
@@ -16,6 +18,7 @@ const KanbanBoard = () => {
         { id: 2, title: 'Task 2', status: 1 },
         { id: 3, title: 'Task 3', status: 1 },
         { id: 4, title: 'Task 4', status: 2 },
+
         // add more tasks as needed
     ]);
 
@@ -42,21 +45,20 @@ const KanbanBoard = () => {
             ));
     };
 
+    const columnDivs = columns.map((item) => (
+        <div key={item.id} className="column">
+          
+          <h2>{item.title}</h2>
+          {renderTaskCards(item.id)}
+        </div>
+      ));
+
+
     return (
+        
         <div className="board">
-            <div className="column">
-                <h2>{columns[0].title}</h2>
-                {renderTaskCards(columns[0].id)}
-            </div>
-            <div className="column">
-                <h2>{columns[1].title}</h2>
-                {renderTaskCards(columns[1].id)}
-            </div>
-            <div className="column">
-                <h2>{columns[2].title}</h2>
-                {renderTaskCards(columns[2].id)}
-            </div>
-            <button onClick={() => handleTaskMove(1, columns[2].id)}>Move to Done</button>
+            {columnDivs}
+            <button onClick={() => handleTaskMove(1, 2)}>Move to Done</button>
         </div>
     );
 };

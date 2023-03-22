@@ -14,10 +14,10 @@ const KanbanBoard = () => {
     ])
 
     const [tasks, setTasks] = useState([
-        { id: 1, title: 'Task 1', status: 0},
-        { id: 2, title: 'Task 2', status: 1 },
-        { id: 3, title: 'Task 3', status: 1 },
-        { id: 4, title: 'Task 4', status: 2 },
+        {  title: 'Task 1', status: 0},
+        {  title: 'Task 2', status: 1 },
+        {  title: 'Task 3', status: 1 },
+        { title: 'Task 4', status: 2 },
 
         // add more tasks as needed
     ]);
@@ -39,7 +39,7 @@ const KanbanBoard = () => {
             .filter(task => task.status === status)
             .map(task => (
 
-                <div key={task.id} className="task-card">
+                <div key={task.title} className="task-card">
                     <TaskCard task={task} />
                 </div>
             ));

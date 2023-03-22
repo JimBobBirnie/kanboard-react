@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import TaskCard from './TaskCard';
 
 const KanbanBoard = () => {
-    const [tasks, setTasks] = useState([
-        { id: 1, title: 'Task 1', status: 'To Do' },
-        { id: 2, title: 'Task 2', status: 'In Progress' },
-        { id: 3, title: 'Task 3', status: 'Done' },
-        { id: 4, title: 'Task 4', status: 'Done' },
-        // add more tasks as needed
-    ]);
+
 
     const [columns, setColumns] = useState([
-        'To Do', 'In Progress', 'Done'
+        { id: 0, title: 'To Do' },
+        { id: 1, title: 'In Progress' },
+        { id: 2, title: 'Done' },
+        { id: 3, title: 'Complete' }
     ])
+
+    const [tasks, setTasks] = useState([
+        { id: 1, title: 'Task 1', status: 0},
+        { id: 2, title: 'Task 2', status: 1 },
+        { id: 3, title: 'Task 3', status: 1 },
+        { id: 4, title: 'Task 4', status: 2 },
+        // add more tasks as needed
+    ]);
 
     const handleTaskMove = (id, newStatus) => {
         const updatedTasks = tasks.map(task => {
@@ -40,18 +45,18 @@ const KanbanBoard = () => {
     return (
         <div className="board">
             <div className="column">
-                <h2>{columns[0]}</h2>
-                {renderTaskCards('To Do')}
+                <h2>{columns[0].title}</h2>
+                {renderTaskCards(columns[0].id)}
             </div>
             <div className="column">
-                <h2>{columns[1]}</h2>
-                {renderTaskCards('In Progress')}
+                <h2>{columns[1].title}</h2>
+                {renderTaskCards(columns[1].id)}
             </div>
             <div className="column">
-                <h2>{columns[2]}</h2>
-                {renderTaskCards('Done')}
+                <h2>{columns[2].title}</h2>
+                {renderTaskCards(columns[2].id)}
             </div>
-            <button onClick={() => handleTaskMove(1, 'Done')}>Move to Done</button>
+            <button onClick={() => handleTaskMove(1, columns[2].id)}>Move to Done</button>
         </div>
     );
 };

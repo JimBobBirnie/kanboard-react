@@ -9,16 +9,16 @@ const KanbanBoard = () => {
         { kanbanOrder: 0, title: 'To Do' },
         { kanbanOrder: 1, title: 'In Analysis' },
         { kanbanOrder: 2, title: 'In Progress' },
-        { kanbanOrder: 5, title: 'Complete' },
         { kanbanOrder: 3, title: 'In QA' },
-        { kanbanOrder: 4, title: 'Done' }
+        { kanbanOrder: 4, title: 'Done' },
+        { kanbanOrder: 5, title: 'Complete' }
     ])
 
     const [tasks, setTasks] = useState([
-        { title: 'Task 0', status: 0 },
-        { title: 'Task 1', status: 1 },
-        { title: 'Task 2', status: 1 },
-        { title: 'Task 3', status: 2 },
+        { title: 'Task 0', kanbanOrder: 0 },
+        { title: 'Task 1', kanbanOrder: 1 },
+        { title: 'Task 2', kanbanOrder: 1 },
+        { title: 'Task 3', kanbanOrder: 2 },
 
         // add more tasks as needed
     ]);
@@ -46,7 +46,7 @@ const KanbanBoard = () => {
 
     const taskIsComplete = (task) => {
         const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
-        return task.status === sortedStates[sortedStates.length - 1].kanbanOrder;
+        return task.kanbanOrder === sortedStates[sortedStates.length - 1].kanbanOrder;
     }
 
     const moveForwardOrBack = (task, columnOffset) => {
@@ -60,7 +60,7 @@ const KanbanBoard = () => {
 
     const getNewCardStatusAdvance = (task) => {
         const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
-        const currentIndex = columns.findIndex(column => column.kanbanOrder === task.status);
+        const currentIndex = columns.findIndex(column => column.kanbanOrder === task.kanbanOrder);
         if (currentIndex + 1 < columns.length) {
             return sortedStates[currentIndex + 1].kanbanOrder;
         }
@@ -69,18 +69,18 @@ const KanbanBoard = () => {
 
     const resolveAddCards = () => {
         const updatedTasks = tasks.map(task => {
-            if(taskIsComplete(task)){
+            if (taskIsComplete(task)) {
                 return task;
             }
             const randomNumberForAdvance = Math.random();
             const advanceCard = randomNumberForAdvance < advanceProbability;
             if (advanceCard) {
-                return { ...task, status: getNewCardStatusAdvance(task) }
+                return { ...task, kanbanOrder: getNewCardStatusAdvance(task) }
             }
             const randomNumberForRestart = Math.random();
             const restartCard = randomNumberForRestart < backToStartProbability;
             if (restartCard) {
-                return { ...task, status: columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder)[0].kanbanOrder }
+                return { ...task, kanbanOrder: columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder)[0].kanbanOrder }
             }
             return task;
         });
@@ -97,13 +97,13 @@ const KanbanBoard = () => {
 
     const newCard = () => {
         const newCardTitle = 'Task ' + tasks.length;
-        const updatedTasks = [...tasks, { title: newCardTitle, status: 0 }];
+        const updatedTasks = [...tasks, { title: newCardTitle, kanbanOrder: 0 }];
         setTasks(updatedTasks);
     }
 
-    const renderTaskCards = (status) => {
+    const renderTaskCards = (kanbanOrder) => {
         return tasks
-            .filter(task => task.status === status)
+            .filter(task => task.kanbanOrder === kanbanOrder)
             .map(task => (
 
                 <div key={task.title} className="task-card">

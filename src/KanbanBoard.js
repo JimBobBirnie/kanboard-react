@@ -32,10 +32,14 @@ const KanbanBoard = () => {
         setTasks(updatedTasks);
     };
 
-    // const moveForward = (task) => {
-    //     const sortedStates = 
+    const moveForward = (task) => {
+        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
+        const index = columns.findIndex(column => column.kanbanOrder === task.status);
+        if (index < sortedStates.length - 1) {
+            handleTaskMove(task, sortedStates[index + 1].kanbanOrder);
+        }
 
-    // }
+    }
 
     const newCard = () => {
         const newCardTitle = 'Task ' + tasks.length;
@@ -49,7 +53,7 @@ const KanbanBoard = () => {
             .map(task => (
 
                 <div key={task.title} className="task-card">
-                    <TaskCard task={task} moveForward={() => handleTaskMove(task, 5)} />
+                    <TaskCard task={task} moveForward={() => moveForward(task)} />
                 </div>
             ));
     };

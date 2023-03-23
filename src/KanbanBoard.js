@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { scryRenderedDOMComponentsWithClass } from 'react-dom/test-utils';
 import TaskCard from './TaskCard';
 
 const KanbanBoard = () => {
@@ -28,10 +29,7 @@ const KanbanBoard = () => {
         return 'Days elapsed: ' + elapsedDays;
     }
 
-    const incrementDays = () => {
 
-        setElapsedDays(elapsedDays+1);
-    }
 
     const handleTaskMove = (movingTask, newStatus) => {
         const updatedTasks = tasks.map(task => {
@@ -54,7 +52,22 @@ const KanbanBoard = () => {
             handleTaskMove(task, sortedStates[index + columnOffset].kanbanOrder);
         }
     }
+    const moveAllCardsForward = () => {
+        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
+        const updatedTasks = tasks.map(task => {
+            const index = columns.findIndex(column => column.kanbanOrder === task.status);
+            if (index + 1 < columns.length) {
+                return { ...task, status: sortedStates[index + 1].kanbanOrder }
+            }
+            return task;
+        });
+        setTasks(updatedTasks);
+    }
+    const incrementDays = () => {
 
+        setElapsedDays(elapsedDays + 1);
+        moveAllCardsForward();
+    }
 
     const newCard = () => {
         const newCardTitle = 'Task ' + tasks.length;

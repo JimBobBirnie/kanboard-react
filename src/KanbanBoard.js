@@ -31,8 +31,6 @@ const KanbanBoard = () => {
         return 'Days elapsed: ' + elapsedDays;
     }
 
-
-
     const handleTaskMove = (movingTask, newStatus) => {
         const updatedTasks = tasks.map(task => {
             if (task === movingTask) {
@@ -45,6 +43,11 @@ const KanbanBoard = () => {
 
     const moveForward = 1;
     const moveBack = -1;
+
+    const taskIsComplete = (task) => {
+        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
+        return task.status === sortedStates[sortedStates.length - 1].kanbanOrder;
+    }
 
     const moveForwardOrBack = (task, columnOffset) => {
 
@@ -66,6 +69,9 @@ const KanbanBoard = () => {
 
     const resolveAddCards = () => {
         const updatedTasks = tasks.map(task => {
+            if(taskIsComplete(task)){
+                return task;
+            }
             const randomNumberForAdvance = Math.random();
             const advanceCard = randomNumberForAdvance < advanceProbability;
             if (advanceCard) {
@@ -73,8 +79,8 @@ const KanbanBoard = () => {
             }
             const randomNumberForRestart = Math.random();
             const restartCard = randomNumberForRestart < backToStartProbability;
-            if(restartCard){
-                return {...task, status: columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder)[0].kanbanOrder}
+            if (restartCard) {
+                return { ...task, status: columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder)[0].kanbanOrder }
             }
             return task;
         });

@@ -41,6 +41,15 @@ const KanbanBoard = () => {
 
     }
 
+    const moveBack = (task) => {
+        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
+        const index = columns.findIndex(column => column.kanbanOrder === task.status);
+        if (index > 0) {
+            handleTaskMove(task, sortedStates[index - 1].kanbanOrder);
+        }
+
+    }
+
     const newCard = () => {
         const newCardTitle = 'Task ' + tasks.length;
         const updatedTasks = [...tasks, { title: newCardTitle, status: 0 }];
@@ -53,7 +62,9 @@ const KanbanBoard = () => {
             .map(task => (
 
                 <div key={task.title} className="task-card">
-                    <TaskCard task={task} moveForward={() => moveForward(task)} />
+                    <TaskCard task={task}
+                        moveForward={() => moveForward(task)}
+                        moveBack={() => moveBack(task)} />
                 </div>
             ));
     };

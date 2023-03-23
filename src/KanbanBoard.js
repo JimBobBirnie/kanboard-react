@@ -34,7 +34,7 @@ const KanbanBoard = () => {
     const handleTaskMove = (movingTask, newStatus) => {
         const updatedTasks = tasks.map(task => {
             if (task === movingTask) {
-                return { ...task, status: newStatus };
+                return { ...task, kanbanOrder: newStatus };
             }
             return task;
         });
@@ -52,7 +52,7 @@ const KanbanBoard = () => {
     const moveForwardOrBack = (task, columnOffset) => {
 
         const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
-        const index = columns.findIndex(column => column.kanbanOrder === task.status);
+        const index = columns.findIndex(column => column.kanbanOrder === task.kanbanOrder);
         if (index + columnOffset >= 0 && index + columnOffset < columns.length) {
             handleTaskMove(task, sortedStates[index + columnOffset].kanbanOrder);
         }

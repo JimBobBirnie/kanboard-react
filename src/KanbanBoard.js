@@ -5,12 +5,12 @@ const KanbanBoard = () => {
 
 
     const [columns, setColumns] = useState([
-        { id: 0, title: 'To Do' },
-        { id: 4, title: 'In Analysis' },
-        { id: 1, title: 'In Progress' },
-        { id: 5, title: 'In QA' },
-        { id: 2, title: 'Done' },
-        { id: 3, title: 'Complete' }
+        { kanbanOrder: 0, title: 'To Do' },
+        { kanbanOrder: 1, title: 'In Analysis' },
+        { kanbanOrder: 2, title: 'In Progress' },
+        { kanbanOrder: 3, title: 'In QA' },
+        { kanbanOrder: 4, title: 'Done' },
+        { kanbanOrder: 5, title: 'Complete' }
     ])
 
     const [tasks, setTasks] = useState([
@@ -32,6 +32,11 @@ const KanbanBoard = () => {
         setTasks(updatedTasks);
     };
 
+    // const moveForward = (task) => {
+    //     const sortedStates = 
+
+    // }
+
     const newCard = () => {
         const newCardTitle = 'Task ' + tasks.length;
         const updatedTasks = [...tasks, { title: newCardTitle, status: 0 }];
@@ -50,10 +55,10 @@ const KanbanBoard = () => {
     };
 
     const columnDivs = columns.map((item) => (
-        <div key={item.id} className="column">
+        <div key={item.kanbanOrder} className="column">
 
             <h2>{item.title}</h2>
-            {renderTaskCards(item.id)}
+            {renderTaskCards(item.kanbanOrder)}
         </div>
     ));
 

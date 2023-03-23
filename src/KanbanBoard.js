@@ -32,24 +32,20 @@ const KanbanBoard = () => {
         setTasks(updatedTasks);
     };
 
-    const moveForward = (task) => {
+    const moveForward = 1;
+    const moveBack = -1;
+
+    const moveForwardOrBack = (task, columnOffset) =>{
+       
         const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
         const index = columns.findIndex(column => column.kanbanOrder === task.status);
-        if (index < sortedStates.length - 1) {
-            handleTaskMove(task, sortedStates[index + 1].kanbanOrder);
+        if (index + columnOffset >= 0 && index + columnOffset < columns.length)
+        {
+            handleTaskMove(task, sortedStates[index + columnOffset].kanbanOrder);
         }
-
     }
 
-    const moveBack = (task) => {
-        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
-        const index = columns.findIndex(column => column.kanbanOrder === task.status);
-        if (index > 0) {
-            handleTaskMove(task, sortedStates[index - 1].kanbanOrder);
-        }
-
-    }
-
+  
     const newCard = () => {
         const newCardTitle = 'Task ' + tasks.length;
         const updatedTasks = [...tasks, { title: newCardTitle, status: 0 }];
@@ -63,8 +59,8 @@ const KanbanBoard = () => {
 
                 <div key={task.title} className="task-card">
                     <TaskCard task={task}
-                        moveForward={() => moveForward(task)}
-                        moveBack={() => moveBack(task)} />
+                        moveForward={() => moveForwardOrBack(task, moveForward)}
+                        moveBack={() => moveForwardOrBack(task, moveBack)} />
                 </div>
             ));
     };

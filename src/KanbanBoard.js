@@ -44,7 +44,7 @@ const KanbanBoard = () => {
             .map(task => (
 
                 <div key={task.title} className="task-card">
-                    <TaskCard task={task} />
+                    <TaskCard task={task} moveForward={()=>handleTaskMove(task, 5)}/>
                 </div>
             ));
     };

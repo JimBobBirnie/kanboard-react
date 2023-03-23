@@ -8,9 +8,9 @@ const KanbanBoard = () => {
         { kanbanOrder: 0, title: 'To Do' },
         { kanbanOrder: 1, title: 'In Analysis' },
         { kanbanOrder: 2, title: 'In Progress' },
+        { kanbanOrder: 5, title: 'Complete' },
         { kanbanOrder: 3, title: 'In QA' },
-        { kanbanOrder: 4, title: 'Done' },
-        { kanbanOrder: 5, title: 'Complete' }
+        { kanbanOrder: 4, title: 'Done' }
     ])
 
     const [tasks, setTasks] = useState([
@@ -49,18 +49,20 @@ const KanbanBoard = () => {
             .map(task => (
 
                 <div key={task.title} className="task-card">
-                    <TaskCard task={task} moveForward={()=>handleTaskMove(task, 5)}/>
+                    <TaskCard task={task} moveForward={() => handleTaskMove(task, 5)} />
                 </div>
             ));
     };
 
-    const columnDivs = columns.map((item) => (
-        <div key={item.kanbanOrder} className="column">
+    const columnDivs = columns
+        .sort((a, b) => a.kanbanOrder - b.kanbanOrder)
+        .map((item) => (
+            <div key={item.kanbanOrder} className="column">
 
-            <h2>{item.title}</h2>
-            {renderTaskCards(item.kanbanOrder)}
-        </div>
-    ));
+                <h2>{item.title}</h2>
+                {renderTaskCards(item.kanbanOrder)}
+            </div>
+        ));
 
 
     return (

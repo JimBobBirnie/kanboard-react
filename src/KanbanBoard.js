@@ -22,6 +22,17 @@ const KanbanBoard = () => {
         // add more tasks as needed
     ]);
 
+    const [elapsedDays, setElapsedDays] = useState(0);
+
+    const elapsedDaysText = () => {
+        return 'Days elapsed: ' + elapsedDays;
+    }
+
+    const incrementDays = () => {
+
+        setElapsedDays(elapsedDays+1);
+    }
+
     const handleTaskMove = (movingTask, newStatus) => {
         const updatedTasks = tasks.map(task => {
             if (task === movingTask) {
@@ -35,17 +46,16 @@ const KanbanBoard = () => {
     const moveForward = 1;
     const moveBack = -1;
 
-    const moveForwardOrBack = (task, columnOffset) =>{
-       
+    const moveForwardOrBack = (task, columnOffset) => {
+
         const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
         const index = columns.findIndex(column => column.kanbanOrder === task.status);
-        if (index + columnOffset >= 0 && index + columnOffset < columns.length)
-        {
+        if (index + columnOffset >= 0 && index + columnOffset < columns.length) {
             handleTaskMove(task, sortedStates[index + columnOffset].kanbanOrder);
         }
     }
 
-  
+
     const newCard = () => {
         const newCardTitle = 'Task ' + tasks.length;
         const updatedTasks = [...tasks, { title: newCardTitle, status: 0 }];
@@ -77,10 +87,13 @@ const KanbanBoard = () => {
 
 
     return (
-
-        <div className="board">
-            {columnDivs}
-            <button onClick={() => newCard()}>New card</button>
+        <div>
+            <div className="board">
+                {columnDivs}
+            </div>
+            <div><button onClick={() => newCard()}>New card</button></div>
+            <div><button onClick={() => incrementDays()}>Increment days</button></div>
+            <div id='daysElapsedDiv'>{elapsedDaysText()}</div>
         </div>
     );
 };

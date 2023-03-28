@@ -6,19 +6,26 @@ const KanbanBoard = () => {
 
 
     const [columns, setColumns] = useState([
-        { kanbanOrder: 0, title: 'To Do' },
-        { kanbanOrder: 1, title: 'In Analysis' },
-        { kanbanOrder: 2, title: 'In Progress' },
-        { kanbanOrder: 3, title: 'In QA' },
-        { kanbanOrder: 4, title: 'Done' },
-        { kanbanOrder: 5, title: 'Complete' }
+        { kanbanOrder: 0, title: 'To Do', active: true },
+        { kanbanOrder: 1, title: 'In Analysis', active: false },
+        { kanbanOrder: 1.5, title: 'Ready for dev', active: false },
+        { kanbanOrder: 2, title: 'In dev', active: true },
+        { kanbanOrder: 2.5, title: 'Ready for QA', active: false },
+        { kanbanOrder: 3, title: 'In QA', active: false },
+        { kanbanOrder: 3.5, title: 'Ready for release', active: false },
+        { kanbanOrder: 4, title: 'Done', active: true },
+        { kanbanOrder: 5, title: 'Complete', active: false }
     ])
+
+    const activeColumns = () => {
+        return columns.filter(c => c.active);
+    }
 
     const [tasks, setTasks] = useState([
         { title: 'Task 0', kanbanOrder: 0 },
-        { title: 'Task 1', kanbanOrder: 1 },
-        { title: 'Task 2', kanbanOrder: 1 },
-        { title: 'Task 3', kanbanOrder: 2 },
+        { title: 'Task 1', kanbanOrder: 0 },
+        { title: 'Task 2', kanbanOrder: 0 },
+        { title: 'Task 3', kanbanOrder: 0 },
 
         // add more tasks as needed
     ]);
@@ -45,22 +52,24 @@ const KanbanBoard = () => {
     const moveBack = -1;
 
     const taskIsComplete = (task) => {
-        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
+        const sortedStates = activeColumns().sort((a, b) => a.kanbanOrder - b.kanbanOrder);
         return task.kanbanOrder === sortedStates[sortedStates.length - 1].kanbanOrder;
     }
 
     const moveForwardOrBack = (task, columnOffset) => {
 
-        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
-        const index = columns.findIndex(column => column.kanbanOrder === task.kanbanOrder);
-        if (index + columnOffset >= 0 && index + columnOffset < columns.length) {
+        const sortedStates = activeColumns().sort((a, b) => a.kanbanOrder - b.kanbanOrder);
+        const index = activeColumns().findIndex(column => column.kanbanOrder === task.kanbanOrder);
+
+        if (index + columnOffset >= 0 && index + columnOffset < activeColumns().length) {
+
             handleTaskMove(task, sortedStates[index + columnOffset].kanbanOrder);
         }
     }
 
     const getNewCardStatusAdvance = (task) => {
-        const sortedStates = columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder);
-        const currentIndex = columns.findIndex(column => column.kanbanOrder === task.kanbanOrder);
+        const sortedStates = activeColumns().sort((a, b) => a.kanbanOrder - b.kanbanOrder);
+        const currentIndex = activeColumns().findIndex(column => column.kanbanOrder === task.kanbanOrder);
         if (currentIndex + 1 < columns.length) {
             return sortedStates[currentIndex + 1].kanbanOrder;
         }
@@ -114,16 +123,46 @@ const KanbanBoard = () => {
             ));
     };
 
-    const columnDivs = columns
+    const columnDivs = activeColumns()
         .sort((a, b) => a.kanbanOrder - b.kanbanOrder)
-        .map((item) => (
-            <div key={item.kanbanOrder} className="column">
+        .filter((column) => column.active)
+        .map((column) => (
 
-                <h2>{item.title}</h2>
-                {renderTaskCards(item.kanbanOrder)}
+            <div key={column.kanbanOrder} className="column">
+
+                <h2>{column.title}</h2>
+                {renderTaskCards(column.kanbanOrder)}
             </div>
         ));
 
+    const handleCheckboxChange = (column) => {
+        column.checked = !column.checked;
+        // setColumns(columns);
+        const updatedColumns = columns.map(c => {
+            if (c === column) {
+                return { ...c, active: column.checked };
+            }
+            return c;
+        });
+        setColumns(updatedColumns);
+       // alert(column.title);
+    }
+    const renderColumnSelector = () => {
+        return (columns
+            .sort((a, b) => a.kanbanOrder - b.kanbanOrder)
+            .map((column) => (
+                <div>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={column.active}
+                            onChange={() => handleCheckboxChange(column)}
+                        />
+                        {column.title}
+                    </label>
+                </div>
+            )));
+    }
 
     return (
         <div>
@@ -133,6 +172,7 @@ const KanbanBoard = () => {
             <div><button onClick={() => newCard()}>New card</button></div>
             <div><button onClick={() => incrementDays()}>Increment days</button></div>
             <div id='daysElapsedDiv'>{elapsedDaysText()}</div>
+            <div className="activeColumnSelector">{renderColumnSelector()}</div>
         </div>
     );
 };

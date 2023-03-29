@@ -137,7 +137,6 @@ const KanbanBoard = () => {
 
     const handleCheckboxChange = (column) => {
         column.checked = !column.checked;
-        // setColumns(columns);
         const updatedColumns = columns.map(c => {
             if (c === column) {
                 return { ...c, active: column.checked };
@@ -145,17 +144,18 @@ const KanbanBoard = () => {
             return c;
         });
         setColumns(updatedColumns);
-        // alert(column.title);
     }
     const renderColumnSelector = () => {
         return (columns
             .sort((a, b) => a.kanbanOrder - b.kanbanOrder)
             .map((column) => (
-                <div>
+
+                <div key={column.title} >
                     <label>
                         <input
                             type="checkbox"
                             checked={column.active}
+                            
                             onChange={() => handleCheckboxChange(column)}
                         />
                         {column.title}
@@ -172,7 +172,7 @@ const KanbanBoard = () => {
             <div><button onClick={() => newCard()}>New card</button></div>
             <div><button onClick={() => incrementDays()}>Increment days</button></div>
             <div key='daysElapsed' >{elapsedDaysText()}</div>
-            <div className="activeColumnSelector">{renderColumnSelector()}</div>
+            <div key='activeColumnSelector' className="activeColumnSelector">{renderColumnSelector()}</div>
         </div>
     );
 };

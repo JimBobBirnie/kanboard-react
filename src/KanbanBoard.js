@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { scryRenderedDOMComponentsWithClass } from 'react-dom/test-utils';
+
 import TaskCard from './TaskCard';
 
 const KanbanBoard = () => {
 
 
-    const [columns, setColumns] = useState([
+    const [stateColumns, setColumns] = useState([
         { kanbanOrder: 0, title: 'To Do', active: true },
         { kanbanOrder: 1, title: 'In Analysis', active: false },
         { kanbanOrder: 1.5, title: 'Ready for dev', active: false },
@@ -18,7 +18,7 @@ const KanbanBoard = () => {
     ])
 
     const activeColumns = () => {
-        return columns.filter(c => c.active);
+        return stateColumns.filter(c => c.active);
     }
 
     const [tasks, setTasks] = useState([
@@ -70,7 +70,7 @@ const KanbanBoard = () => {
     const getNewCardStatusAdvance = (task) => {
         const sortedStates = activeColumns().sort((a, b) => a.kanbanOrder - b.kanbanOrder);
         const currentIndex = activeColumns().findIndex(column => column.kanbanOrder === task.kanbanOrder);
-        if (currentIndex + 1 < columns.length) {
+        if (currentIndex + 1 < stateColumns.length) {
             return sortedStates[currentIndex + 1].kanbanOrder;
         }
         return currentIndex;
@@ -89,7 +89,7 @@ const KanbanBoard = () => {
             const randomNumberForRestart = Math.random();
             const restartCard = randomNumberForRestart < backToStartProbability;
             if (restartCard) {
-                return { ...task, kanbanOrder: columns.sort((a, b) => a.kanbanOrder - b.kanbanOrder)[0].kanbanOrder }
+                return { ...task, kanbanOrder: stateColumns.sort((a, b) => a.kanbanOrder - b.kanbanOrder)[0].kanbanOrder }
             }
             return task;
         });
@@ -137,7 +137,7 @@ const KanbanBoard = () => {
 
     const handleCheckboxChange = (column) => {
         column.checked = !column.checked;
-        const updatedColumns = columns.map(c => {
+        const updatedColumns = stateColumns.map(c => {
             if (c === column) {
                 return { ...c, active: column.checked };
             }
@@ -146,7 +146,7 @@ const KanbanBoard = () => {
         setColumns(updatedColumns);
     }
     const renderColumnSelector = () => {
-        return (columns
+        return (stateColumns
             .sort((a, b) => a.kanbanOrder - b.kanbanOrder)
             .map((column) => (
 

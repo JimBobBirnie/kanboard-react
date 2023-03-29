@@ -2,20 +2,10 @@ import React, { useState } from 'react';
 
 import TaskCard from './TaskCard';
 
-const KanbanBoard = () => {
+const KanbanBoard = ({columns}) => {
 
 
-    const [stateColumns, setColumns] = useState([
-        { kanbanOrder: 0, title: 'To Do', active: true },
-        { kanbanOrder: 1, title: 'In Analysis', active: false },
-        { kanbanOrder: 1.5, title: 'Ready for dev', active: false },
-        { kanbanOrder: 2, title: 'In dev', active: true },
-        { kanbanOrder: 2.5, title: 'Ready for QA', active: false },
-        { kanbanOrder: 3, title: 'In QA', active: false },
-        { kanbanOrder: 3.5, title: 'Ready for release', active: false },
-        { kanbanOrder: 4, title: 'Done', active: true },
-        { kanbanOrder: 5, title: 'Complete', active: false }
-    ])
+    const [stateColumns, setColumns] = useState(columns)
 
     const activeColumns = () => {
         return stateColumns.filter(c => c.active);

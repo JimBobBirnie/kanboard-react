@@ -128,7 +128,7 @@ const KanbanBoard = () => {
         .filter((column) => column.active)
         .map((column) => (
 
-            <div key={column.kanbanOrder} className="column">
+            <div key={column.kanbanOrder} className="column" >
 
                 <h2>{column.title}</h2>
                 {renderTaskCards(column.kanbanOrder)}
@@ -145,7 +145,7 @@ const KanbanBoard = () => {
             return c;
         });
         setColumns(updatedColumns);
-       // alert(column.title);
+        // alert(column.title);
     }
     const renderColumnSelector = () => {
         return (columns
@@ -171,7 +171,7 @@ const KanbanBoard = () => {
             </div>
             <div><button onClick={() => newCard()}>New card</button></div>
             <div><button onClick={() => incrementDays()}>Increment days</button></div>
-            <div id='daysElapsedDiv'>{elapsedDaysText()}</div>
+            <div key='daysElapsed' >{elapsedDaysText()}</div>
             <div className="activeColumnSelector">{renderColumnSelector()}</div>
         </div>
     );

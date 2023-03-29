@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import TaskCard from './TaskCard';
 
-const KanbanBoard = ({columns}) => {
+const KanbanBoard = ({ columns, tasks }) => {
 
 
     const [stateColumns, setColumns] = useState(columns)
@@ -11,14 +11,7 @@ const KanbanBoard = ({columns}) => {
         return stateColumns.filter(c => c.active);
     }
 
-    const [tasks, setTasks] = useState([
-        { title: 'Task 0', kanbanOrder: 0 },
-        { title: 'Task 1', kanbanOrder: 0 },
-        { title: 'Task 2', kanbanOrder: 0 },
-        { title: 'Task 3', kanbanOrder: 0 },
-
-        // add more tasks as needed
-    ]);
+    const [stateTasks, setTasks] = useState(tasks);
 
     const [elapsedDays, setElapsedDays] = useState(0);
     const advanceProbability = 0.5;
@@ -29,7 +22,7 @@ const KanbanBoard = ({columns}) => {
     }
 
     const handleTaskMove = (movingTask, newStatus) => {
-        const updatedTasks = tasks.map(task => {
+        const updatedTasks = stateTasks.map(task => {
             if (task === movingTask) {
                 return { ...task, kanbanOrder: newStatus };
             }
@@ -67,7 +60,7 @@ const KanbanBoard = ({columns}) => {
     }
 
     const resolveAddCards = () => {
-        const updatedTasks = tasks.map(task => {
+        const updatedTasks = stateTasks.map(task => {
             if (taskIsComplete(task)) {
                 return task;
             }
@@ -95,13 +88,13 @@ const KanbanBoard = ({columns}) => {
     }
 
     const newCard = () => {
-        const newCardTitle = 'Task ' + tasks.length;
-        const updatedTasks = [...tasks, { title: newCardTitle, kanbanOrder: 0 }];
+        const newCardTitle = 'Task ' + stateTasks.length;
+        const updatedTasks = [...stateTasks, { title: newCardTitle, kanbanOrder: 0 }];
         setTasks(updatedTasks);
     }
 
     const renderTaskCards = (kanbanOrder) => {
-        return tasks
+        return stateTasks
             .filter(task => task.kanbanOrder === kanbanOrder)
             .map(task => (
 
@@ -145,7 +138,7 @@ const KanbanBoard = ({columns}) => {
                         <input
                             type="checkbox"
                             checked={column.active}
-                            
+
                             onChange={() => handleCheckboxChange(column)}
                         />
                         {column.title}

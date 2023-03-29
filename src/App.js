@@ -15,12 +15,18 @@ function App() {
     { kanbanOrder: 5, title: 'Complete', active: false }
   ];
 
+  const tasks = [
+    { title: 'Task 0', kanbanOrder: 0 },
+    { title: 'Task 1', kanbanOrder: 0 },
+    { title: 'Task 2', kanbanOrder: 0 },
+  ];
+
   return (
     <div className="App">
       <header className="App-header">
         Kanban Simulation
       </header>
-      <KanbanBoard columns={columns} />
+      <KanbanBoard columns={columns} tasks={tasks} />
     </div>
   );
 }
